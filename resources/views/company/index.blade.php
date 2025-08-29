@@ -19,9 +19,14 @@
                     <p class="card-text"><strong>Dueño:</strong> {{ $company->owner }}</p>
                     <p class="card-text"><strong>Correo Electrónico:</strong> {{ $company   ->email }}</p>
                     <p class="card-text"><strong>Sitio Web:</strong> <a href="{{ $company->website }}" target="_blank">{{ $company->website }}</a></p>
+                    <p class="card-text"><strong>Plan:</strong> {{ ucfirst($company->plan) }}</p>
                     <p class="card-text"><strong>Tipo de Despliegue:</strong> {{ ucfirst($company->deployment_type) }}</p>
                     <p class="card-text"><strong>Estado:</strong> {{ ucfirst($company->status) }}</p>
                     <p class="card-text"><strong>Comentarios:</strong> {{ $company->comments }}</p>
+                    
+                    <a href="{{ route('companies.show', $company) }}" class="btn btn-sm btn-info">
+                        <i class="bi bi-eye"></i> Ver
+                    </a>
                     <a href="{{ route('companies.edit', $company) }}" class="btn btn-sm btn-warning">
                         <i class="bi bi-pencil-square"></i> Editar
                     </a>

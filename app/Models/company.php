@@ -16,5 +16,6 @@ class Company extends Model
     }
     //activar soft deletes
     use SoftDeletes;
+    protected $dates = ['deleted_at'];
 
 }

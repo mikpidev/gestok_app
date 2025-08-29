@@ -21,6 +21,7 @@ Route::resource('access', AccessController::class);
 
 Route::resource('companies', CompanyController::class);
 
+
 Route::resource('stores', StoreController::class);
 
 Route::resource('users', UserController::class);

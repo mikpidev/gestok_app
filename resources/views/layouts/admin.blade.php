@@ -10,7 +10,7 @@
     <header class="bg-dark text-white p-3">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Gestok Admin</a>
+            <a class="navbar-brand" href="{{ route('companies.index') }}">Gestok Admin</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

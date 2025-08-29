@@ -19,6 +19,7 @@
             <p class="card-text"><strong>Estado:</strong> {{ ucfirst($company->status) }}</p>
             <p class="card-text"><strong>Comentarios:</strong> {{ $company->comments }}</p>
             <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-primary">Editar</a>
+            <a href="{{ route('companies.index') }}" class="btn btn-secondary">Volver</a>
 
             <form action="{{ route('companies.destroy', $company->id) }}" method="POST" class="d-inline">
                 @csrf

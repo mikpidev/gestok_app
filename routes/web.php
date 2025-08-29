@@ -3,6 +3,7 @@
 //Lista de Rutas a llamar
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\StoreTaxInfoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccessController;
 
@@ -21,7 +22,9 @@ Route::resource('access', AccessController::class);
 
 Route::resource('companies', CompanyController::class);
 
-
 Route::resource('stores', StoreController::class);
+
+Route::resource('stores_tax_info', StoreTaxInfoController::class);
+
 
 Route::resource('users', UserController::class);

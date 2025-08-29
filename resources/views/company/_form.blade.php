@@ -1,4 +1,3 @@
-
 <label for="company_name">Nombre de la Compañía</label>
 <input type="text" name="company_name" id="company_name" class="form-control" value= "{{ old('company_name', $company->company_name ?? '') }}" required>
 

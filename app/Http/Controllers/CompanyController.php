@@ -34,9 +34,11 @@ class CompanyController extends Controller
             'comments' => 'nullable',
         ]);
 
-        Company::create($validated);
+        $company = Company::create($validated);
 
-        return redirect()->route('store.index')->with('success', 'Compañía creada exitosamente. Crear Tienda'); // Redirige a la creación de la tienda
+        return redirect()->route('stores.create', ['company' => $company->id])
+                         ->with('success', 'Compañía creada, ahora crea su primera tienda.');
+
     }
 
     public function show(Company $company)

@@ -2,18 +2,14 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Crear Tienda</h2>
-        <a href="{{ route('stores.create', ['company' => $company->id]) }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Nueva Tienda
-        </a>
-
+        <h2>Crear Informacion Fiscal</h2>
+        <a href="{{ route('stores.show', $store->id) }}" class="btn btn-secondary">Volver a la Tienda</a>
     </div>
-
-    <!--     formulario para la creacion de un companias -->
-    <form action="{{ route('stores.store', ['company' => $company->id]) }}" method="POST">
+    <form action="{{ route('stores_tax_info.store', ['store' => $store->id]) }}" method="POST">
         @csrf
-        @include('store._form')
+        @include('stores_tax_info._form', ['store' => $store, 'storeTaxInfo' => null])
     </form>
+
     
     @if ($errors->any())
         <div class="alert alert-danger">    
@@ -24,6 +20,4 @@
             </ul>       
         </div>
     @endif
-    
-    
 @endsection

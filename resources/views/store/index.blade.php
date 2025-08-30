@@ -4,10 +4,11 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Tiendas</h2>
 
-            <!-- Botón para crear una nueva compañía -->
-        <a href="{{ route('stores.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Nueva Tienda
+        @foreach($companies as $company)
+        <a href="{{ route('stores.create', ['company' => $company->id]) }}" class="btn btn-primary">
+            Crear tienda para {{ $company->company_name }}
         </a>
+        @endforeach
     </div>
 
     @forelse($stores as $stores)

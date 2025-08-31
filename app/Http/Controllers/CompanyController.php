@@ -11,6 +11,9 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::all();
+
+        //retorna lista de tiendas
+
         return view('company.index', compact('companies'));
     }
 
@@ -43,6 +46,7 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
+        
         return view('company.show', compact('company'));
     }
 

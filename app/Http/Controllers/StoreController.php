@@ -17,7 +17,10 @@ class StoreController extends Controller
     }
 
     public function create(Company $company)
-    {
+    {   
+        //pasar info para crear tienda 
+        
+
         // Lógica para mostrar el formulario de creación de tienda ya inclye la compania previamente creada   
         return view('store.create', compact('company'));
     }
@@ -55,7 +58,7 @@ class StoreController extends Controller
 
     public function edit(Store $store)
     {
-        // Lógica para mostrar el formulario de edición de una tienda
+        //$store = Store::findOrFail($id);
         return view('store.edit', compact('store'));
     }
 
@@ -82,7 +85,7 @@ class StoreController extends Controller
     {
         // Lógica para eliminar una tienda (soft delete)
         $store->delete();
-        return redirect()->route('store.index')->with('success', 'Tienda eliminada exitosamente.');
+        return redirect()->route('store.show')->with('success', 'Tienda eliminada exitosamente.');
     }
 }
 

@@ -1,11 +1,32 @@
-@import 'tailwindcss';
+/* resources/css/app.css */
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Estilos para el botón de editar */
+.btn-edit {
+    color: #6c757d; /* gris del texto */
+    border: 1px solid #6c757d;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
 }
+
+.btn-edit:hover {
+    background-color: #5394FC; /* azul en hover */
+    border-color: #5394FC;
+    color: #fff; /* texto blanco en hover */
+}
+
+/* Estilos para el botón de editar */
+
+.btn-add {
+    color: white; /* texto blanco */
+    border: 1px solid #28a745; /* verde más sobrio */
+    background-color: #28a745cc; /* verde semi-transparente, más elegante */
+    border-radius: 4px; /* esquinas ligeramente redondeadas */
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-add:hover {
+    background-color: #218838; /* verde un poco más oscuro al pasar el mouse */
+    border-color: #1e7e34;
+}
+

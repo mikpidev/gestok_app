@@ -27,8 +27,8 @@
             <p class="card-text"><strong>Estado:</strong> {{ ucfirst($store->status) }}</p>
             <p class="card-text"><strong>Comentarios:</strong> {{ $store->comments }}</p>
             <a href="{{ route('stores.edit', $store->id) }}" class="btn btn-primary">Editar</a>
-            <a href="{{ route('stores.index') }}" class="btn btn-secondary">Volver a la Lista</a>
-         
+            <a href="{{ route('companies.show', $store->company_id) }}" class="btn btn-secondary">Volver a la Compañía</a>
+     
             
             
             <form action="{{ route('stores.destroy', $store->id) }}" method="POST" class="d-inline">

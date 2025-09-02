@@ -5,28 +5,50 @@ use App\Models\Company;
 use Illuminate\Validation\Rule;
 use App\Models\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
 {
-    public function index()
+
+
+
+    public function index(Request $request)
     {
-        // Lógica para listar las tiendas
-        $stores = Store::all();
-        $companies = Company::all(); // <-- agregamos las compañías
-        return view(('store.index'), compact('stores', 'companies')); 
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Por favor, inicia sesión.');
+        }
+
+        if ($user->hasRole('superadmin')) {
+            $companyId = session('selected_company_id');
+            $stores = Store::where('company_id', $companyId)->get();
+        } elseif ($user->hasRole('admin')) {
+            $stores = Store::where('company_id', $user->company_id)->get();
+        }
+
+        return view('store.index', compact('stores'));
     }
+
 
     public function create(Company $company)
     {   
-        //pasar info para crear tienda 
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }  
+          
         
-
         // Lógica para mostrar el formulario de creación de tienda ya inclye la compania previamente creada   
         return view('store.create', compact('company'));
     }
 
     public function store(Request $request, Company $company)
     {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
         $validated = $request->validate([
             'store_name' => 'required|max:200',
             'address'    => 'required',
@@ -45,25 +67,48 @@ class StoreController extends Controller
     }
     
 
-    public function show(Store $store, Company $company)
+    public function show(Store $store)
     {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
 
-        //validar que la tienda tiene la compañia y la informacion tributaria
-        $store->load('taxInfo','company');
-        
-        // Lógica para mostrar los detalles de una tienda incluye la compañia y la informacion tributaria
+        // Validar acceso según rol
+        if ($user->hasRole('superadmin')) {
+            $companyId = session('selected_company_id');
+            if (!$companyId) abort(403, 'Se requiere compañía.');
+            if ($store->company_id != $companyId) abort(403, 'Acceso no autorizado.');
+        } elseif ($user->hasRole('admin')) {
+            if ($store->company_id != $user->company_id) abort(403, 'Acceso no autorizado.');
+        } else {
+            abort(403, 'Acceso no autorizado.');
+        }
+
+        $store->load('taxInfo', 'company');
+
         return view('store.show', compact('store'));
-
     }
 
-    public function edit(Store $store)
+    public function edit(Request $request, Store $store)
     {
+
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         //$store = Store::findOrFail($id);
         return view('store.edit', compact('store'));
     }
 
     public function update(Request $request, Store $store)
-    {
+    {  
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        } 
+
         // Validación de los datos del formulario
         $validated = $request->validate([
             'store_name' => 'required|max:200',
@@ -81,11 +126,18 @@ class StoreController extends Controller
         return redirect()->route('stores.index')->with('success', 'Tienda actualizada exitosamente.');
     }
 
-    public function destroy(Store $store)
+    public function destroy(Request $request, Store $store)
     {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         // Lógica para eliminar una tienda (soft delete)
         $store->delete();
         return redirect()->route('store.show')->with('success', 'Tienda eliminada exitosamente.');
     }
 }
+
+
 

@@ -19,7 +19,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">{{ $store->store_name }}</h5>
-            <p class="card-text"><strong>Compañía:</strong> {{ $store->company->company_name ?? 'Sin compañía' }}</p>
+            <p class="card-text"><strong>Compañía:</strong> {{ $store->company->company_name }}</p>
             <p class="card-text"><strong>Dirección:</strong> {{ $store->address }}</p>
             <p class="card-text"><strong>Teléfono:</strong> {{ $store->phone }}</p>
             <p class="card-text"><strong>Gerente:</strong> {{ $store->manager }}</p>
@@ -28,8 +28,6 @@
             <p class="card-text"><strong>Comentarios:</strong> {{ $store->comments }}</p>
             <a href="{{ route('stores.edit', $store->id) }}" class="btn btn-primary">Editar</a>
             <a href="{{ route('companies.show', $store->company_id) }}" class="btn btn-secondary">Volver a la Compañía</a>
-     
-            
             
             <form action="{{ route('stores.destroy', $store->id) }}" method="POST" class="d-inline">
                 @csrf

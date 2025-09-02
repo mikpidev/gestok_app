@@ -23,16 +23,13 @@ class Store extends Model
 
     //Uso de SoftDeletes
     use SoftDeletes;
-
+    //relacion para eliminacion en cascada de la informacion fiscal
     public function taxInfoDelete()
     {
         return $this->hasOne(StoreTaxInfo::class);
     }
 
-    //relacion con usuarios de uno a muchos
-    public function users(){
-        return $this->hasMany(User::class);
-    }
+
 
     
         //eliminacion en cascada de la informacion fiscal al eliminar un establecimiento    
@@ -45,14 +42,23 @@ class Store extends Model
         });
     }
 
+    //relacion con la compañia
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
     
+    //relacion con la informacion fiscal
     public function taxInfo()
     {
         return $this->hasOne(StoreTaxInfo::class);
     }
+
+    //relacion usuarios
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     
 }

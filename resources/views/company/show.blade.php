@@ -28,7 +28,7 @@
             <tbody>
                 @forelse($company->stores as $store)
                     <tr>
-                        <td><a href="{{ route('stores.show', $store->id) }}">{{ $store->store_name }}</a></td>
+                        <td><a href="{{ route('companies.show', $company) }}">{{ $store->store_name }}</a></td>
                         <td>{{ $store->email ?? '-' }}</td>
                         <td>{{ $store->comments ?? '-' }}</td>
                         <td class="text-center">

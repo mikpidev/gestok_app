@@ -8,26 +8,31 @@ use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        //Limpiar Cache de permisos/roles
+        // Limpiar cache de permisos/roles
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        //Crear Permisos
-        Permission::firstOrCreate(['name' => 'view users', 'guard_name' => 'web']);
-        Permission::firstOrCreate(['name' => 'assign roles', 'guard_name' => 'web' ]);
+        // Crear permisos base (solo los que tú definas)
+        $permissions = [
+            'view users',
+            'assign roles',
+            // agrega más según necesidades
+        ];
 
-        //Crear Roles
+        foreach ($permissions as $perm) {
+            Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
+        }
 
-        $adminRole = Role::firstOrCreate(['name' => 'admin','guard_name' => 'web' ]);
-        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+        // Crear roles base
+        $roles = ['superadmin', 'admin', 'user'];
+        foreach ($roles as $role) {
+            $r = Role::firstOrCreate(['name' => $role, 'guard_name' => 'web']);
 
-        //Asignar Admin Permisos
-        $adminRole -> givePermissionTo(Permission::all());
-
-
+            // Asignar permisos al superadmin o admin según convenga
+            if ($role === 'superadmin') {
+                $r->syncPermissions(Permission::all());
+            }
+        }
     }
 }

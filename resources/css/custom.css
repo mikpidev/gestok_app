@@ -1,0 +1,82 @@
+/* resources/css/app.css */
+
+/* href sin decoracion */
+a {
+    text-decoration: none;
+    color: inherit; /* Hereda el color del texto padre */
+}
+
+/* href en hover sin decoracion */
+a:hover {
+    text-decoration: none;
+    color: black; /* Hereda el color del texto padre */
+    font-weight: 500; /* Negrita en hover */
+}
+
+/* Estilos boton engranaje */
+#config-btn {
+
+    svg {
+        vertical-align: middle; /* Alinea el icono SVG con el texto */
+        margin-right: 0.25rem; /* Espacio entre el icono y el texto */
+        height: 1.5em; /* Ajusta el tamaño del icono */
+        width: 1.5em; /* Ajusta el tamaño del icono */
+    }
+
+    border: 1px solid #6c757d; /* gris del borde */
+    background-color: transparent; /* fondo transparente */
+    color: #6c757d; /* gris del texto */
+    transition: all 0.2s ease-in-out;
+}
+
+#config-btn:hover {
+    background-color: white; /* azul en hover */
+    border-color: black;
+    color: black; /* texto blanco en hover */
+    font-weight: 500; /* Negrita en hover */
+}
+
+/* Estilos para el botón de editar */
+.btn-edit {
+    svg {
+        vertical-align: middle; /* Alinea el icono SVG con el texto */
+        margin-right: 0.25rem; /* Espacio entre el icono y el texto */
+        height: 1.5em; /* Ajusta el tamaño del icono */
+        width: 1.5em; /* Ajusta el tamaño del icono */
+    }
+    color: #6c757d; /* gris del texto */
+    border: 1px solid #6c757d;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-edit:hover {
+    background-color: white; /* azul en hover */
+    border-color: black;
+    color: #5394FC; /* texto blanco en hover */
+}
+
+/* Estilos para el botón de editar */
+
+.btn-add {
+    color: green; /* verde más sobrio */
+
+    svg {
+        vertical-align: middle; /* Alinea el icono SVG con el texto */
+        margin-right: 0.25rem; /* Espacio entre el icono y el texto */
+        height: 1.5em; /* Ajusta el tamaño del icono */
+        width: 1.5em; /* Ajusta el tamaño del icono */
+    }
+    
+    border: 1px solid white; /* verde más sobrio */
+    background-color: white; /* verde semi-transparente, más elegante */
+    border-radius: 4px; /* esquinas ligeramente redondeadas */
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-add:hover {
+    background-color: white; /* verde un poco más oscuro al pasar el mouse */
+    border-color: #1e7e34;
+    color: black; /* texto blanco en hover */
+}

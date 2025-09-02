@@ -1,5 +1,4 @@
 <!--Formulario para crear o editar una tienda-->
-<label for="company_id">Compañía</label>
 <input type="hidden" name="company_id" id="company_id" class="form-control" value="{{ old('company_id', $store->company_id ?? '') }}" required>
 
 <label for="store_name">Nombre de la Tienda</label>

@@ -1,32 +1,3 @@
-/* resources/css/app.css */
-
-/* Estilos para el botón de editar */
-.btn-edit {
-    color: #6c757d; /* gris del texto */
-    border: 1px solid #6c757d;
-    background-color: transparent;
-    transition: all 0.2s ease-in-out;
-}
-
-.btn-edit:hover {
-    background-color: #5394FC; /* azul en hover */
-    border-color: #5394FC;
-    color: #fff; /* texto blanco en hover */
-}
-
-/* Estilos para el botón de editar */
-
-.btn-add {
-    color: white; /* texto blanco */
-    border: 1px solid #28a745; /* verde más sobrio */
-    background-color: #28a745cc; /* verde semi-transparente, más elegante */
-    border-radius: 4px; /* esquinas ligeramente redondeadas */
-    padding: 0.5rem 1rem;
-    transition: all 0.2s ease-in-out;
-}
-
-.btn-add:hover {
-    background-color: #218838; /* verde un poco más oscuro al pasar el mouse */
-    border-color: #1e7e34;
-}
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

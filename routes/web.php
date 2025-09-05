@@ -32,9 +32,9 @@ Route::middleware([PreventBackHistory4::class])->group(function () {
 
     
     
-    
     // CRUDS
     Route::resource('companies', CompanyController::class);
+
     Route::resource('stores_tax_info', StoreTaxInfoController::class);
     Route::resource('stores', StoreController::class);
     Route::resource('stores_tax_info', StoreTaxInfoController::class);
@@ -59,6 +59,16 @@ Route::middleware([PreventBackHistory4::class])->group(function () {
     Route::post('stores_tax_info/{store}', [StoreTaxInfoController::class, 'store'])
         ->name('stores_tax_info.store');
 
+    
+    //rutas para usuarios4
+    Route::resource('stores.users', \App\Http\Controllers\UserController::class);
+
+    Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::get('users/create', [\App\Http\Controllers\UserController::class, 'create'])->name('users.create');
+    Route::post('users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user}/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+    Route::put('users/{user}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy'); 
 
 });
 

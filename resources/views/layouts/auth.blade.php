@@ -95,6 +95,7 @@
             font-weight: bold;
         }
     </style>
+    
 </head>
 <body>
     <div class="auth-card">

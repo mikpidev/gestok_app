@@ -6,20 +6,43 @@ use Spatie\Permission\Models\Role;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash; 
+
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    private function validateStoreAccess(Store $store)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Por favor, inicia sesión.');
+        }
+
+        if ($user->hasRole('superadmin')){
+            $companyId = session('selected_company_id');
+            if ($store->company_id != $companyId) {
+                abort(403, 'No tienes permiso para acceder a esta tienda.');
+            }
+
+        } elseif ($user->hasRole('admin')) {
+            if ($store->company_id != $user->company_id) {
+                abort(403, 'No tienes permiso para acceder a esta tienda.');
+        }
+        } else {
+            abort(403, 'No tienes permiso para acceder a esta tienda.');
+    }
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Store $store)
     {   
-        
-        //logear usuario
-        $user = Auth::user();
-        //verificar que el usuario pertenece a la tienda
-        $store = $user->store;
+
+        //validacion de acceso a la tienda
+        $this->validateStoreAccess($store);
 
         // Mostrar solo los usuarios de esta tienda
         $users = $store->users()->with('roles')->get();       
@@ -31,9 +54,8 @@ class UserController extends Controller
      */
     public function create(Store $store)
     {   
-        //logear usuario
-        $user = Auth::user();
-        $store = $user->store; // tienda del usuario logueado
+        //validacion de acceso a la tienda
+        $this->validateStoreAccess($store);
 
         //formulario para crear usuarios segun roles
         $roles = Role::all(); // Obtener todos los roles disponibles
@@ -46,92 +68,115 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request, Store $store)
-    {
-        //guardar un nuevo usuario
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+{
+    $this->validateStoreAccess($store);
 
-        $user = $store->users()->create([
-            //relacion con la tienda
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-            'company_id' => $store->company_id, // Asignar la compañía de la tienda
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'role' => 'required|exists:roles,name',
+    ]);
 
-        $user->assignRole($validated['role']); // Asignar el rol seleccionado al usuario
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'company_id' => $store->company_id,
+        'store_id' => $store->id, // ← AGREGAR esta línea
+    ]);
 
-        return redirect()->route('stores.users.index',[$store->id])
-            ->with('success', 'Usuario creado exitosamente.');
+    // Asignar rol
+    $user->assignRole($request->role);
 
-        
-    }
-
+    return redirect()->route('stores.users.index', $store->id) // ← Verificar ruta
+                        ->with('success', 'Usuario creado exitosamente.');
+}
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Store $store, User $user)
     {
-        //mostrar usuarios segun la tienda
-        return view('users.show', compact('user'));
+        $this->validateStoreAccess($store);
+        
+        // Verificar que el usuario pertenezca a esta tienda
+        if ($user->store_id !== $store->id) {
+            abort(404, 'Usuario no encontrado en esta tienda.');
+        }
+
+        return view('users.show', compact('user', 'store'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(Store $store, User $user)
     {
-        //editar usuario
-        return view('users.edit', compact('user'));
+        $this->validateStoreAccess($store);
+        
+        // Verificar que el usuario pertenezca a esta tienda
+        if ($user->store_id !== $store->id) {
+            abort(404, 'Usuario no encontrado en esta tienda.');
+        }
 
+        $roles = Role::all();
+        return view('users.edit', compact('user', 'store', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, Store $store)
     {
-        $store = Auth::user()->store; // la tienda del usuario logueado
-    
-        // Validar datos, ignorando el email del usuario actual
-        $validated = $request->validate([
+
+         $this->validateStoreAccess($store);
+        
+        // Verificar que el usuario pertenezca a esta tienda
+        if (!$store->users()->where('user_id', $user->id)->exists()) {
+            abort(404, 'Usuario no encontrado en esta tienda.');
+        }
+
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required',
+            'role' => 'required|exists:roles,name',
         ]);
-    
-        // Actualizar datos del usuario
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        if (!empty($validated['password'])) {
-            $user->password = bcrypt($validated['password']);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        // Actualizar contraseña solo si se proporciona
+        if ($request->filled('password')) {
+            $user->update(['password' => Hash::make($request->password)]);
         }
-        $user->company_id = $store->company_id; // asignar compañía de la tienda
-        $user->store_id = $store->id;          // asegurar que pertenece a la tienda
-    
-        $user->save();
-    
-        // Actualizar rol
-        $user->syncRoles([$validated['role']]);
-    
-        return redirect()->route('users.index')
-                         ->with('success', 'Usuario actualizado exitosamente.');
+
+        // Sincronizar rol
+        $user->syncRoles([$request->role]);
+
+        return redirect()->route('users.index', $store)
+                        ->with('success', 'Usuario actualizado exitosamente.');
     }
     
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Store $store, User $user)
     {
-        //eliminar usuario
+        $this->validateStoreAccess($store);
+        
+        // Verificar que el usuario pertenezca a esta tienda (HasMany)
+        if ($user->store_id !== $store->id) {
+            abort(404, 'Usuario no encontrado en esta tienda.');
+        }
+
         $user->delete();
-        return redirect()->route('stores.users.index', [$user->store_id])
-                         ->with('success', 'Usuario eliminado exitosamente.');
-                         
+
+        return redirect()->route('stores.users.index', $store->id)
+                        ->with('success', 'Usuario eliminado exitosamente.');
     }
 }

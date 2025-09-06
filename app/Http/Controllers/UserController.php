@@ -83,7 +83,7 @@ class UserController extends Controller
         'email' => $request->email,
         'password' => Hash::make($request->password),
         'company_id' => $store->company_id,
-        'store_id' => $store->id, // ← AGREGAR esta línea
+        'store_id' => $store->id, 
     ]);
 
     // Asignar rol

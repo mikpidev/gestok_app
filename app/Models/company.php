@@ -25,6 +25,11 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
     
+    //relacion de 1 a muchos con product_types
+    public function productTypes(){
+        return $this->hasMany(ProductType::class);
+    }
+
     //activar soft deletes
     use SoftDeletes;
     protected $dates = ['deleted_at'];

@@ -42,6 +42,19 @@ class Store extends Model
         });
     }
 
+    //eliminacion en cascada de los usuarios y productos al eliminar un establecimiento
+    protected static function boot(){
+        parent::boot();
+        static::deleting(function($store){
+            foreach ($store->users as $user) {
+                $user->delete();
+            }
+            foreach ($store->products as $product) {
+                $product->delete();
+            }
+        });
+    }
+
     //relacion con la compañia
     public function company()
     {
@@ -60,5 +73,10 @@ class Store extends Model
         return $this->hasMany(User::class);
     }
 
+    //relacion productos
+    public function products()
+    {
+        return $this->hasMany(ProductType::class);
+    }
     
 }
